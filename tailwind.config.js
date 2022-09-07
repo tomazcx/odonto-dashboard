@@ -2,7 +2,17 @@
 module.exports = {
     content: ['./pages/**/*.tsx', './components/**/*.tsx'],
     theme: {
+
         extend: {
+            keyframes: {
+                show: {
+                    '0%': { width: '80%' },
+                    '100%': { width: '100%' },
+                }
+            },
+            animation: {
+                'show-aside': 'show .3s forwards',
+            },
             fontFamily: {
                 sans: "Kumbh Sans, sans-serif"
             },
