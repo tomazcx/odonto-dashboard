@@ -1,4 +1,4 @@
-import Caret from "./Caret"
+import Caret from "../assets/Caret"
 
 interface TitleInterface{
     text: string;

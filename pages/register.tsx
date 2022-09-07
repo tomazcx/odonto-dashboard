@@ -1,7 +1,7 @@
 import { NextPage } from "next"
 import { useContext } from "react"
 import TextArea from "../assets/Textarea"
-import TitleForm from "../assets/TitleForm"
+import TitleForm from "../components/TitleForm"
 import Input from "../components/Input"
 import Layout from "../components/Layout"
 import { AsideContext } from "../services/asideContext"

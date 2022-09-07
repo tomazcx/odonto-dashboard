@@ -1,6 +1,10 @@
 import React from "react";
 
-function List() {
+interface SVGInterface{
+  color?: string;
+}
+
+function List({color} : SVGInterface) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -10,7 +14,7 @@ function List() {
       viewBox="0 0 36 36"
     >
       <g
-        stroke="#FCFCFC"
+        stroke={color?? "#FCFCFC"}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="4"
@@ -20,7 +24,7 @@ function List() {
       </g>
       <defs>
         <clipPath id="clip0_5_7">
-          <path fill="#fff" d="M0 0H36V36H0z"></path>
+          <path fill="#FFF" d="M0 0H36V36H0z"></path>
         </clipPath>
       </defs>
     </svg>
