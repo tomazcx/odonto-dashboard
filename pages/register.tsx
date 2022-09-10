@@ -5,6 +5,7 @@ import TitleForm from "../components/TitleForm"
 import Input from "../components/Input"
 import Layout from "../components/Layout"
 import { AsideContext } from "../services/asideContext"
+import Button from "../components/Button"
 
 const Register: NextPage = () => {
 
@@ -58,8 +59,8 @@ const Register: NextPage = () => {
                         <hr className="col-span-12 mt-12 border-gray-200" />
                     </div>
                     <div className="flex items-center justify-end gap-4">
-                        <button onClick={(e) => resetForm(e)} className="bg-red-400 rounded-lg py-2 px-4 w-48 text-white hover:bg-red-500 transition-colors">Resetar Campos</button>
-                        <button className="bg-blue-400 rounded-lg py-2 px-4 w-48 text-white hover:bg-blue-500 transition-colors">Cadastrar</button>
+                        <Button funClick={resetForm} text='Resetar campos' color='red' isLink={false}  />
+                        <Button text='Cadastrar' color='blue' isLink={false} />
                     </div>
                 </form>
             </section>

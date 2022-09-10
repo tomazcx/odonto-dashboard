@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import Link from "next/link";
 import { useContext } from "react";
+import Button from "../components/Button";
 import Layout from "../components/Layout";
 import { AsideContext, AsideProvider } from "../services/asideContext";
 
@@ -16,12 +17,8 @@ const Main: NextPage = () => {
                     <hr className="border-gray-300 w-48" />
                     <h2 className="text-center">Realize o cadastro dos dados de seus pacientes <br /> e acompanhe suas consultas.</h2>
                     <div className="flex gap-4">
-                        <Link href={'/clients'} passHref>
-                            <a className="bg-blue-400 hover:bg-blue-500 transition-colors py-2 px-4 w-48 text-center rounded-lg text-white">Cadastrados</a>
-                        </Link>
-                        <Link href={'/register'} passHref>
-                            <a className="bg-blue-400 hover:bg-blue-500 transition-colors py-2 px-4 w-48 text-center rounded-lg text-white">Cadastrar paciente</a>
-                        </Link>
+                        <Button text='Cadastrados' color='blue' isLink={true} path='/clients' />
+                        <Button text='Cadastrados' color='blue' isLink={true} path='/register' />
                     </div>
                 </div>
             </section>
