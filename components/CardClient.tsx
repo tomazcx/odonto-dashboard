@@ -1,6 +1,20 @@
 import Link from "next/link"
+import { useContext } from "react";
+import { modalContext } from "../services/modalContext";
 
-const CardClient = () => {
+interface ClientInterface{
+    deleteFun(value:boolean):void;
+}
+
+const CardClient = ({deleteFun} : ClientInterface) => {
+
+    const {setModal} = useContext(modalContext)
+
+    const handleDelete = () =>{
+        setModal(true)
+        deleteFun(true)
+    }
+
     return (
         <div className="bg-gray-100 col-span-2 rounded-lg flex flex-col p-4 gap-3">
             <h2 className="text-lg"> <span className="font-medium">Id do paciente:</span> 00</h2>
@@ -11,9 +25,9 @@ const CardClient = () => {
                 <span className="col-span-2 font-semibold">Celular:</span>  <span className="col-span-4 text-gray-500">(49) 991613639</span>
             </div>
             <Link href={'/client'} passHref>
-                <a className="text-blue-400 text-sm hover:text-blue-500 transition-colors text-center">Ver detalhes e consultas</a>
+                <a onClick={() => setModal(false)} className="text-blue-400 text-sm hover:text-blue-500 transition-colors text-center">Ver detalhes e consultas</a>
             </Link>
-            <span className="text-red-400 text-center text-sm cursor-pointer hover:text-red-500 transition-colors">Excluir</span>
+            <span onClick={() => handleDelete()} className="text-red-400 text-center text-sm cursor-pointer hover:text-red-500 transition-colors">Excluir</span>
         </div>
     )
 }

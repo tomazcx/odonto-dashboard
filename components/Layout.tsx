@@ -1,4 +1,6 @@
-import { ReactNode } from "react"
+import classNames from "classnames"
+import { ReactNode, useContext } from "react"
+import { modalContext } from "../services/modalContext"
 import { Aside } from "./Aside"
 import { Header } from "./Header"
 
@@ -7,8 +9,11 @@ interface ChildInterface {
 }
 
 const Layout = ({children}: ChildInterface) => {
+
+    const {modal} = useContext(modalContext)
+
     return (
-        <div className="flex flex-col min-h-screen">
+        <div>
             <Header />
             <main className="grid grid-cols-12">
                 <Aside />

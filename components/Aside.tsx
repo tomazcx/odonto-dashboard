@@ -1,8 +1,10 @@
+import classNames from "classnames"
 import { useContext, useState } from "react"
 import Clients from "../assets/Clients"
 import Home from "../assets/Home"
 import RegisterIcon from "../assets/RegisterIcon"
 import { AsideContext } from "../services/asideContext"
+import { modalContext } from "../services/modalContext"
 import BoxHover from "./BoxHover"
 import IconSidebar from "./IconSidebar"
 
@@ -12,10 +14,15 @@ export const Aside = () => {
     const [hoverClients, setClients] = useState(false)
     const [hoverRegister, setRegister] = useState(false)
 
-    const {active} = useContext(AsideContext)
+    const { active } = useContext(AsideContext)
+    const { modal } = useContext(modalContext)
 
     return (
-        <aside className={`${!active ? 'col-span-1' : 'col-span-2 animate-show-aside'} bg-blue-400 min-h-screen flex flex-col gap-6 items-center py-24`}>
+        <aside className={classNames('bg-blue-400 min-h-screen flex flex-col gap-6 items-center py-24', {
+            'opacity-50': modal,
+            'col-span-1': !active,
+            'col-span-2 animate-show-aside': active
+        })}>
             <IconSidebar
                 icon={<Home />}
                 hoverBox={<BoxHover text={'Página Inicial'} />}

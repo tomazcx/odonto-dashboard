@@ -1,25 +1,54 @@
 import { NextPage } from "next"
 import Image from "next/image"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import Button from "../components/Button"
 import Layout from "../components/Layout"
 import { AsideContext } from "../services/asideContext"
 import odontograma from '../assets/odontograma.png'
-import ConsultItem from "../components/ConsultItem"
+import AppointmentItem from "../components/AppointmentItem"
+import ModalRegister from "../components/ModalRegister"
+import { modalContext } from "../services/modalContext"
+import classNames from "classnames"
+import ModalDelete from "../components/ModalDelete"
 
 const Client: NextPage = () => {
 
+    const [modalRegister, setRegister] = useState(false)
+    const [modalDelete, setDelete] = useState(false)
     const { active } = useContext(AsideContext)
+    const { modal, setModal } = useContext(modalContext)
+    const [textModal, setText] = useState('')
+
+    const handleModal = () => {
+        if (modalDelete === false) {
+            setRegister(true)
+            setModal(true)
+        }
+    }
+
+    const handleModalDelete = () =>{
+        if(modalRegister === false){
+            setDelete(true)
+            setModal(true)
+            setText('o paciente?')
+        }
+    }
 
     return (
         <Layout>
-            <section className={`${active ? 'col-span-10' : 'col-span-11'} p-12 flex flex-col gap-4`}>
+            {modalRegister ? <ModalRegister closeFun={setRegister} /> : <></>}
+            {modalDelete ? <ModalDelete text={textModal} closeFun={setDelete} /> : <></>}
+            <section className={classNames('p-12 flex flex-col gap-4', {
+                'col-span-10': active,
+                'col-span-11': !active,
+                'opacity-50': modal
+            })}>
                 <div className="flex w-full justify-between">
                     <h1 className="text-xl font-semibold">Dados do paciente - Id 00</h1>
 
                     <div className="flex items-center gap-4">
-                        <Button text="Editar informações" isLink={false} color='blue' />
-                        <Button text="Excluir paciente" isLink={false} color='red' />
+                        <Button text="Editar informações" isLink={false} isBlue={true} />
+                        <Button funClick={handleModalDelete} text="Excluir paciente" isLink={false} isBlue={false} />
                     </div>
                 </div>
                 <hr />
@@ -66,13 +95,13 @@ const Client: NextPage = () => {
                             <span className="text-center col-span-2">Procedimento:</span>
                         </div>
                         <div className="flex flex-col gap-2">
-                            <ConsultItem />
-                            <ConsultItem />
-                            <ConsultItem />
+                            <AppointmentItem isModalActive={modalRegister} setText={setText} funModal={setDelete} />
+                            <AppointmentItem isModalActive={modalRegister} setText={setText} funModal={setDelete} />
+                            <AppointmentItem isModalActive={modalRegister} setText={setText} funModal={setDelete} />
                         </div>
                     </div>
                     <div className="flex justify-end">
-                        <Button text='Registrar consulta' color='blue' isLink={false} />
+                        <Button funClick={handleModal} text='Registrar consulta' isBlue={true} isLink={false} />
                     </div>
                 </div>
 

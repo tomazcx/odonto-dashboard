@@ -1,6 +1,6 @@
 import { NextPage } from "next"
 import { useContext } from "react"
-import TextArea from "../assets/Textarea"
+import TextArea from "../components/Textarea"
 import TitleForm from "../components/TitleForm"
 import Input from "../components/Input"
 import Layout from "../components/Layout"
@@ -59,8 +59,8 @@ const Register: NextPage = () => {
                         <hr className="col-span-12 mt-12 border-gray-200" />
                     </div>
                     <div className="flex items-center justify-end gap-4">
-                        <Button funClick={resetForm} text='Resetar campos' color='red' isLink={false}  />
-                        <Button text='Cadastrar' color='blue' isLink={false} />
+                        <Button funClick={resetForm} text='Resetar campos' isBlue={false} isLink={false}  />
+                        <Button text='Cadastrar' isBlue={true} isLink={false} />
                     </div>
                 </form>
             </section>

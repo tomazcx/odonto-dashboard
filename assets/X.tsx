@@ -1,6 +1,10 @@
 import React from "react";
 
-function X() {
+interface ColorInterface{
+  color?: string
+}
+
+function X({color} : ColorInterface) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -10,7 +14,7 @@ function X() {
       viewBox="0 0 24 24"
     >
       <g
-        stroke="#FCFCFC"
+        stroke={color?? '#FCFCFC'}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"

@@ -2,9 +2,10 @@ import ClientItem from "./ClientItem"
 
 interface ClientsInterface{
     list?: string[]
+    deleteFun (value:boolean):void
 }
 
-const ListClients = ({list} : ClientsInterface) => {
+const ListClients = ({list, deleteFun} : ClientsInterface) => {
     return (
         <div className="flex flex-col gap-4">
             <div className="grid grid-cols-12 text-sm">
@@ -22,7 +23,7 @@ const ListClients = ({list} : ClientsInterface) => {
                 </span>
             </div>
             <div className="flex flex-col gap-2 text-sm">
-               {list?.map(client => <ClientItem />)} 
+               {list?.map(client => <ClientItem deleteFun={deleteFun} />)} 
             </div>
         </div>
     )
