@@ -35,7 +35,7 @@ const ModalRegister = ({ closeFun }: ModalInterface) => {
             <form action="" className="flex flex-col gap-4" id="form">
                 <Input text="Data da consulta" required={true} type='date' bg="bg-white" id="date" />
                 <Input text="Dentes" required={true} bg='bg-white' type='text' id="teeth" />
-                <TextArea text="Procedimento" bg="bg-white" id="desc" />
+                <TextArea text="Procedimento" required={true} bg="bg-white" id="desc" />
             </form>
             <div className="flex items-center justify-end gap-4">
                 <Button funClick={resetForm} text="Resetar campos" isBlue={false}  isLink={false} />
