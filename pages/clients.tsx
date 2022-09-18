@@ -1,9 +1,8 @@
 import classNames from "classnames"
-import { NextPage } from "next"
+import { GetServerSideProps, NextPage } from "next"
 import { useContext, useState } from "react"
 import List from "../assets/List"
 import SquaresFour from "../assets/SquaresFour"
-import ClientItem from "../components/ClientItem"
 import GridClients from "../components/GridClients"
 import Layout from "../components/Layout"
 import ListClients from "../components/ListClients"
@@ -12,6 +11,8 @@ import SearchInput from "../components/SearchInput"
 import Select from "../components/Select"
 import { AsideContext } from "../services/asideContext"
 import { modalContext } from "../services/modalContext"
+import {useQuery, gql} from '@apollo/client'
+import { LOAD_CLIENTS } from "../graphql/queries/getClients"
 
 const Clients: NextPage = () => {
 
@@ -63,3 +64,15 @@ const Clients: NextPage = () => {
 }
 
 export default Clients
+
+export const getServerSideProps:GetServerSideProps = async() =>{
+    const {data} = useQuery(LOAD_CLIENTS)
+
+    console.log(data)
+
+    return{
+        props:{
+            clientsQuery: []
+        }
+    }
+}
