@@ -1,13 +1,20 @@
 import Link from "next/link"
-import { useCallback, useContext } from "react";
+import { useContext } from "react";
 import Trash from "../assets/Trash"
 import { modalContext } from "../services/modalContext";
 
 interface ClientInterface{
+    info: {
+        clientSlug:string;
+        age: number;
+        name: string;
+        phoneNumber: string;
+        city: string;
+    }
     deleteFun(value:boolean):void;
 }
 
-const ClientItem = ({deleteFun} : ClientInterface) => {
+const ClientItem = ({deleteFun, info} : ClientInterface) => {
 
     const {setModal} = useContext(modalContext)
 
@@ -18,11 +25,11 @@ const ClientItem = ({deleteFun} : ClientInterface) => {
 
     return (
         <div className="bg-gray-100 rounded-lg w-full grid grid-cols-12 py-2">
-            <span className="col-span-2 text-center">00</span>
-            <span className="col-span-2 text-center">example_name</span>
-            <span className="col-span-2 text-center">Videira</span>
-            <span className="col-span-2 text-center">(49) 991613639</span>
-            <Link href={'/client'} passHref>
+            <span className="col-span-2 text-center">{info.name}</span>
+            <span className="col-span-2 text-center">{info.age}</span>
+            <span className="col-span-2 text-center">{info.city}</span>
+            <span className="col-span-2 text-center">{info.phoneNumber}</span>
+            <Link href={{pathname: '/client', query: {slug: info.clientSlug}}} passHref>
                 <a onClick={() => setModal(false)} className="col-start-10 col-span-2 text-blue-400 hover:text-blue-500 transition-colors">
                     Ver detalhes e consultas
                 </a>

@@ -6,13 +6,8 @@ query getClients {
         clientSlug
         age
         city
-        email
         name
         phoneNumber
-        district
-        budget
-        budgetDescription
         }
     }
-
 `
