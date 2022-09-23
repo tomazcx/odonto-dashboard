@@ -8,6 +8,7 @@ query getClients {
         city
         name
         phoneNumber
+        email
         }
     }
 `
