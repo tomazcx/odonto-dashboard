@@ -43,13 +43,7 @@ const Register = () => {
     const handleSubmit = (e: FormEvent) => {
 
         e.preventDefault()
-
-        console.log(formData)
-
         const slug = accents.remove(formData.name.toLowerCase().replaceAll(" ", "-"))
-
-        console.log(slug)
-
         createClient(
             {
                 variables: {
