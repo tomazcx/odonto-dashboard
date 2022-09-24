@@ -21,6 +21,7 @@ interface ClientInterface {
     phoneNumber: string;
     city: string;
     email: string;
+    id: string;
 }
 
 interface ClientsQuery {
@@ -33,11 +34,18 @@ const Clients = ({ clientsQuery }: ClientsQuery) => {
     const [hoverSquares, setHoverSquares] = useState(false)
     const [showingList, setLayout] = useState(true)
     const [modalDelete, setDelete] = useState(false)
+    const [idToDelete, setId] = useState('')
     const [searchText, setText] = useState("")
     const [filter, setFilter] = useState(0)
 
     const { active } = useContext(AsideContext)
     const { modal } = useContext(modalContext)
+
+    const deleteModal = (id: string) => {
+        setDelete(true)
+        setId(id)
+        console.log(id)
+    }
 
     let clients: ClientInterface[] = searchText.length > 0 ? clientsQuery.filter(client => client.name.toLowerCase().includes(searchText.toLowerCase())) : clientsQuery
 
@@ -56,7 +64,7 @@ const Clients = ({ clientsQuery }: ClientsQuery) => {
 
     return (
         <Layout>
-            {modalDelete ? <ModalDelete closeFun={setDelete} text='o paciente?' /> : <></>}
+            {modalDelete ? <ModalDelete id={idToDelete} closeFun={setDelete} text='o paciente?' /> : <></>}
             <section className={classNames("p-12 flex flex-col gap-12", {
                 'col-span-10': active,
                 'col-span-11': !active,
@@ -85,7 +93,7 @@ const Clients = ({ clientsQuery }: ClientsQuery) => {
                         </div>
                     </div>
                 </div>
-                {showingList ? <ListClients deleteFun={setDelete} list={clients} /> : <GridClients deleteFun={setDelete} list={clients} />}
+                {showingList ? <ListClients deleteModal={deleteModal} list={clients} /> : <GridClients deleteModal={deleteModal} list={clients} />}
             </section>
         </Layout>
     )

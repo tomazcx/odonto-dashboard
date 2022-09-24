@@ -7,6 +7,10 @@ mutation MyQuery($slug: String!, $name: String!, $email: String!, $age: Int!, $p
   ) {
     id
   }
+
+  publishClient(where: {clientSlug: $slug}){
+    id
+  }
 }
 
 `

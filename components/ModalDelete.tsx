@@ -1,19 +1,27 @@
+import { useMutation } from "@apollo/client";
 import { useContext } from "react";
+import { DELETE_CLIENT } from "../graphql/mutations/deleteClient";
 import { modalContext } from "../services/modalContext";
 import Button from "./Button";
 
 interface ModalInterface {
     closeFun(value: boolean): void;
+    id: string;
     text: string;
 }
 
-const ModalDelete = ({ closeFun, text }: ModalInterface) => {
+const ModalDelete = ({ closeFun, text, id }: ModalInterface) => {
 
     const { setModal } = useContext(modalContext)
+    const [deleteClient, {error}] = useMutation(DELETE_CLIENT)
 
     const handleModal = (e: any) => {
         setModal(false)
         closeFun(false)
+    }
+
+    const handleDelete = () =>{
+        deleteClient({variables: {id: id}})
     }
 
     return (
@@ -22,7 +30,7 @@ const ModalDelete = ({ closeFun, text }: ModalInterface) => {
             <hr className="border-gray-300" />
             <div className="flex gap-4">
                 <Button funClick={handleModal} text='Cancelar' isBlue={true} isLink={false} />
-                <Button text='Excluir' isBlue={false} isLink={false} />
+                <Button funClick={handleDelete} text='Excluir' isBlue={false} isLink={false} />
             </div>
         </div>
     )

@@ -5,22 +5,22 @@ import { modalContext } from "../services/modalContext";
 
 interface ClientInterface{
     info: {
-        clientSlug:string;
         age: number;
         name: string;
         phoneNumber: string;
         city: string;
+        id: string;
     }
-    deleteFun(value:boolean):void;
+    deleteModal(id:string):void;
 }
 
-const ClientItem = ({deleteFun, info} : ClientInterface) => {
+const ClientItem = ({deleteModal, info} : ClientInterface) => {
 
     const {setModal} = useContext(modalContext)
 
     const handleDelete = () =>{
         setModal(true)
-        deleteFun(true)
+        deleteModal(info.id)
     }
 
     return (
@@ -29,7 +29,7 @@ const ClientItem = ({deleteFun, info} : ClientInterface) => {
             <span className="col-span-2 text-center">{info.age}</span>
             <span className="col-span-2 text-center">{info.city}</span>
             <span className="col-span-2 text-center">{info.phoneNumber}</span>
-            <Link href={{pathname: '/client', query: {slug: info.clientSlug}}} passHref>
+            <Link href={{pathname: '/client', query: {id: info.id}}} passHref>
                 <a onClick={() => setModal(false)} className="col-start-10 col-span-2 text-blue-400 hover:text-blue-500 transition-colors">
                     Ver detalhes e consultas
                 </a>

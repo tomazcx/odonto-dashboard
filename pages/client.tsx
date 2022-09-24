@@ -137,12 +137,12 @@ export default Client
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
-    const slug = context.query['slug']
+    const id = context.query['id']
 
     const { data } = await client.query({
         query: LOAD_INFO,
         variables: {
-            slug: slug
+            id: id
         }
     })
 

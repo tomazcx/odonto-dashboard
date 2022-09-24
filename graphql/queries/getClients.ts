@@ -2,8 +2,8 @@ import { gql } from '@apollo/client'
 
 export const LOAD_CLIENTS = gql`
 query getClients {
-    clients(stage: DRAFT) {
-        clientSlug
+    clients {
+        id
         age
         city
         name
