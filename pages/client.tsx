@@ -29,6 +29,7 @@ interface ClientInterface{
             clientSlug:string;
             district?:string;
             phoneNumber:string;
+            id: string;
         }
     },
     context: any
@@ -61,7 +62,7 @@ const Client = ({clientInfo, context} : ClientInterface) => {
     return (
         <Layout>
             {modalRegister ? <ModalRegister closeFun={setRegister} /> : <></>}
-            {modalDelete ? <ModalDelete text={textModal} closeFun={setDelete} /> : <></>}
+            {modalDelete ? <ModalDelete id={clientInfo.client.id} text={textModal} closeFun={setDelete} /> : <></>}
             <section className={classNames('p-12 flex flex-col gap-4', {
                 'col-span-10': active,
                 'col-span-11': !active,
