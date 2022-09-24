@@ -10,6 +10,7 @@ import { useMutation } from "@apollo/client"
 import { ToastContainer, toast } from 'react-toastify'
 import accents from 'remove-accents'
 import 'react-toastify/dist/ReactToastify.css'
+import { LOAD_CLIENTS } from "../graphql/queries/getClients"
 
 const Register = () => {
 
@@ -19,7 +20,8 @@ const Register = () => {
     const [createClient] = useMutation(CREATE_CLIENT, {
         onCompleted: () => {
             toast("Paciente cadastrado com sucesso!")
-        }
+        },
+        refetchQueries: [{query: LOAD_CLIENTS}]
     })
 
 

@@ -44,7 +44,6 @@ const Clients = ({ clientsQuery }: ClientsQuery) => {
     const deleteModal = (id: string) => {
         setDelete(true)
         setId(id)
-        console.log(id)
     }
 
     let clients: ClientInterface[] = searchText.length > 0 ? clientsQuery.filter(client => client.name.toLowerCase().includes(searchText.toLowerCase())) : clientsQuery
@@ -103,7 +102,8 @@ export default Clients
 
 export const getServerSideProps: GetServerSideProps = async () => {
     const { data } = await client.query({
-        query: LOAD_CLIENTS
+        query: LOAD_CLIENTS,
+        fetchPolicy: "no-cache"
     })
 
     return {

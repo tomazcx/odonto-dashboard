@@ -32,7 +32,7 @@ const ListClients = ({list, deleteModal} : ClientsInterface) => {
                 </span>
             </div>
             <div className="flex flex-col gap-2 text-sm">
-               {list?.map((client : ClientInterface) => <ClientItem info={client} deleteModal={deleteModal} />)} 
+               {list?.map((client : ClientInterface) => <ClientItem key={client.id} info={client} deleteModal={deleteModal} />)} 
             </div>
         </div>
     )

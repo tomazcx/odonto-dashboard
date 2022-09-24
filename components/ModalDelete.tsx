@@ -1,6 +1,8 @@
 import { useMutation } from "@apollo/client";
+import Router, { useRouter } from "next/router";
 import { useContext } from "react";
 import { DELETE_CLIENT } from "../graphql/mutations/deleteClient";
+import { LOAD_CLIENTS } from "../graphql/queries/getClients";
 import { modalContext } from "../services/modalContext";
 import Button from "./Button";
 
@@ -12,8 +14,10 @@ interface ModalInterface {
 
 const ModalDelete = ({ closeFun, text, id }: ModalInterface) => {
 
+    const router = useRouter()
+
     const { setModal } = useContext(modalContext)
-    const [deleteClient, {error}] = useMutation(DELETE_CLIENT)
+    const [deleteClient] = useMutation(DELETE_CLIENT)
 
     const handleModal = (e: any) => {
         setModal(false)
@@ -21,7 +25,9 @@ const ModalDelete = ({ closeFun, text, id }: ModalInterface) => {
     }
 
     const handleDelete = () =>{
-        deleteClient({variables: {id: id}})
+        deleteClient({variables: {id: id},refetchQueries:[{query:LOAD_CLIENTS}]})
+        handleModal(<></>)
+        router.replace(router.asPath)
     }
 
     return (
