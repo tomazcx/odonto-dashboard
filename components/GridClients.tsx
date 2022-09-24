@@ -10,7 +10,7 @@ interface ClientInterface {
 }
 
 interface GridInterface{
-    list: [ClientInterface]
+    list: ClientInterface[]
     deleteFun (value:boolean):void
 }
 

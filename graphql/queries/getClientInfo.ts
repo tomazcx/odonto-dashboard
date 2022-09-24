@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const LOAD_INFO = gql`
 query MyQuery($slug: String!) {
-  client(where: {clientSlug: $slug}) {
+  client(stage:DRAFT, where: {clientSlug: $slug}) {
     age
     address
     anamnese

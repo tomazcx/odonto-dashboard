@@ -1,6 +1,6 @@
 import classNames from "classnames"
 import { GetServerSideProps, NextPage } from "next"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import List from "../assets/List"
 import SquaresFour from "../assets/SquaresFour"
 import GridClients from "../components/GridClients"
@@ -11,20 +11,20 @@ import SearchInput from "../components/SearchInput"
 import Select from "../components/Select"
 import { AsideContext } from "../services/asideContext"
 import { modalContext } from "../services/modalContext"
-import {client} from '../lib/apollo'
+import { client } from '../lib/apollo'
 import { LOAD_CLIENTS } from "../graphql/queries/getClients"
 
 interface ClientInterface {
-    clientSlug:string;
+    clientSlug: string;
     age: number;
     name: string;
     phoneNumber: string;
     city: string;
-    email:string
+    email: string;
 }
 
 interface ClientsQuery {
-    clientsQuery: [ClientInterface]
+    clientsQuery: ClientInterface[]
 }
 
 const Clients = ({ clientsQuery }: ClientsQuery) => {
@@ -33,9 +33,26 @@ const Clients = ({ clientsQuery }: ClientsQuery) => {
     const [hoverSquares, setHoverSquares] = useState(false)
     const [showingList, setLayout] = useState(true)
     const [modalDelete, setDelete] = useState(false)
-    
+    const [searchText, setText] = useState("")
+    const [filter, setFilter] = useState(0)
+
     const { active } = useContext(AsideContext)
     const { modal } = useContext(modalContext)
+
+    let clients: ClientInterface[] = searchText.length > 0 ? clientsQuery.filter(client => client.name.toLowerCase().includes(searchText.toLowerCase())) : clientsQuery
+
+    switch (filter) {
+        case (0):
+            clients = clients.slice().sort((a, b) => a.name.localeCompare(b.name))
+            break;
+        case (1):
+            clients = clients.slice().sort((a, b) => b.age - a.age)
+            break;
+        case (2):
+            clients = clients.slice().sort((a, b) => a.age - b.age)
+            break;
+
+    }
 
     return (
         <Layout>
@@ -48,8 +65,8 @@ const Clients = ({ clientsQuery }: ClientsQuery) => {
                 <div className="flex w-full justify-between items-center">
                     <h1 className="text-xl">Pacientes Cadastrados</h1>
                     <div className="flex gap-4 items-center">
-                        <Select />
-                        <SearchInput />
+                        <Select funFilter={setFilter} />
+                        <SearchInput funSearch={setText} />
                         <div className="flex gap-4 items-center">
                             <div className="cursor-pointer"
                                 onMouseEnter={() => setHoverList(true)}
@@ -68,7 +85,7 @@ const Clients = ({ clientsQuery }: ClientsQuery) => {
                         </div>
                     </div>
                 </div>
-                {showingList ? <ListClients deleteFun={setDelete} list={clientsQuery} /> : <GridClients deleteFun={setDelete} list={clientsQuery} />}
+                {showingList ? <ListClients deleteFun={setDelete} list={clients} /> : <GridClients deleteFun={setDelete} list={clients} />}
             </section>
         </Layout>
     )
@@ -77,7 +94,7 @@ const Clients = ({ clientsQuery }: ClientsQuery) => {
 export default Clients
 
 export const getServerSideProps: GetServerSideProps = async () => {
-    const {data} = await client.query({
+    const { data } = await client.query({
         query: LOAD_CLIENTS
     })
 

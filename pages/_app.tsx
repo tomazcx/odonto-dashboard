@@ -6,13 +6,16 @@ import { ModalProvider } from '../services/modalContext';
 import { ApolloProvider } from '@apollo/client'
 import { client } from '../lib/apollo';
 
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ModalProvider>
-      <AsideProvider>
-        <Component {...pageProps} />
-      </AsideProvider>
-    </ModalProvider>
+    <ApolloProvider client={client}>
+      <ModalProvider>
+        <AsideProvider>
+          <Component {...pageProps} />
+        </AsideProvider>
+      </ModalProvider>
+    </ApolloProvider>
   )
 }
 

@@ -14,7 +14,9 @@
     "graphql": "^16.6.0",
     "next": "12.2.5",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-toastify": "^9.0.8",
+    "remove-accents": "^0.4.3"
   },
   "devDependencies": {
     "@types/node": "18.7.14",
