@@ -13,6 +13,7 @@ import { AsideContext } from "../services/asideContext"
 import { modalContext } from "../services/modalContext"
 import { client } from '../lib/apollo'
 import { LOAD_CLIENTS } from "../graphql/queries/getClients"
+import { useQuery } from "@apollo/client"
 
 interface ClientInterface {
     clientSlug: string;
@@ -24,11 +25,7 @@ interface ClientInterface {
     id: string;
 }
 
-interface ClientsQuery {
-    clientsQuery: ClientInterface[]
-}
-
-const Clients = ({ clientsQuery }: ClientsQuery) => {
+const Clients = () => {
 
     const [hoverList, setHoverList] = useState(false)
     const [hoverSquares, setHoverSquares] = useState(false)
@@ -36,7 +33,6 @@ const Clients = ({ clientsQuery }: ClientsQuery) => {
     const [modalDelete, setDelete] = useState(false)
     const [idToDelete, setId] = useState('')
     const [searchText, setText] = useState("")
-    const [filter, setFilter] = useState(0)
 
     const { active } = useContext(AsideContext)
     const { modal } = useContext(modalContext)
@@ -46,24 +42,15 @@ const Clients = ({ clientsQuery }: ClientsQuery) => {
         setId(id)
     }
 
-    let clients: ClientInterface[] = searchText.length > 0 ? clientsQuery.filter(client => client.name.toLowerCase().includes(searchText.toLowerCase())) : clientsQuery
 
-    switch (filter) {
-        case (0):
-            clients = clients.slice().sort((a, b) => a.name.localeCompare(b.name))
-            break;
-        case (1):
-            clients = clients.slice().sort((a, b) => b.age - a.age)
-            break;
-        case (2):
-            clients = clients.slice().sort((a, b) => a.age - b.age)
-            break;
+    const { data } = useQuery(LOAD_CLIENTS)
 
-    }
+    let clients: ClientInterface[] = searchText.length > 0 ? data?.clients.filter((client: ClientInterface) => client.name.toLowerCase().includes(searchText.toLowerCase())) : []
+
 
     return (
         <Layout>
-            {modalDelete ? <ModalDelete id={idToDelete} closeFun={setDelete} text='o paciente?' /> : <></>}
+            {modalDelete ? <ModalDelete clientPage={false} id={idToDelete} closeFun={setDelete} text='o paciente?' /> : <></>}
             <section className={classNames("p-12 flex flex-col gap-12", {
                 'col-span-10': active,
                 'col-span-11': !active,
@@ -72,7 +59,6 @@ const Clients = ({ clientsQuery }: ClientsQuery) => {
                 <div className="flex w-full justify-between items-center">
                     <h1 className="text-xl">Pacientes Cadastrados</h1>
                     <div className="flex gap-4 items-center">
-                        <Select funFilter={setFilter} />
                         <SearchInput funSearch={setText} />
                         <div className="flex gap-4 items-center">
                             <div className="cursor-pointer"
@@ -92,23 +78,11 @@ const Clients = ({ clientsQuery }: ClientsQuery) => {
                         </div>
                     </div>
                 </div>
-                {showingList ? <ListClients deleteModal={deleteModal} list={clients} /> : <GridClients deleteModal={deleteModal} list={clients} />}
+
+                {showingList ? <ListClients deleteModal={deleteModal} list={searchText.length > 0 ? clients : data?.clients} /> : <GridClients deleteModal={deleteModal} list={searchText.length > 0 ? clients : data?.clients} />}
             </section>
         </Layout>
     )
 }
 
 export default Clients
-
-export const getServerSideProps: GetServerSideProps = async () => {
-    const { data } = await client.query({
-        query: LOAD_CLIENTS,
-        fetchPolicy: "no-cache"
-    })
-
-    return {
-        props: {
-            clientsQuery: data.clients
-        }
-    }
-}

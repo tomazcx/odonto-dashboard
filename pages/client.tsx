@@ -10,32 +10,36 @@ import ModalRegister from "../components/ModalRegister"
 import { modalContext } from "../services/modalContext"
 import classNames from "classnames"
 import ModalDelete from "../components/ModalDelete"
-import { useRouter } from "next/router"
+import Router, { useRouter } from "next/router"
 import { client } from "../lib/apollo"
 import { LOAD_INFO } from "../graphql/queries/getClientInfo"
-import { gql } from "@apollo/client"
+import { gql, useQuery } from "@apollo/client"
 
-interface ClientInterface{
-    clientInfo: {
-        client: {
-            name: string;
-            age:number;
-            email:string;
-            address?: string;
-            anamnese?: string;
-            budget?: string;
-            budgetDescription?:string;
-            city:string;
-            clientSlug:string;
-            district?:string;
-            phoneNumber:string;
-            id: string;
-        }
-    },
-    context: any
+interface AppointmentInterface{
+    date: string;
+    teeth:string;
+    proccedure:string;
 }
 
-const Client = ({clientInfo, context} : ClientInterface) => {
+interface ClientInterface{
+    client: {
+        name: string;
+        age:number;
+        email:string;
+        address?: string;
+        anamnese?: string;
+        budget?: string;
+        budgetDescription?:string;
+        city:string;
+        clientSlug:string;
+        district?:string;
+        phoneNumber:string;
+        id: string;
+        appointment: AppointmentInterface
+    }
+}
+
+const Client = () => {
 
     const [modalRegister, setRegister] = useState(false)
     const [modalDelete, setDelete] = useState(false)
@@ -43,6 +47,13 @@ const Client = ({clientInfo, context} : ClientInterface) => {
     const { modal, setModal } = useContext(modalContext)
     const [textModal, setText] = useState('')
 
+    const router = useRouter()
+
+    const {data} = useQuery(LOAD_INFO, {
+        variables: {
+            id: router.query.id
+        }
+    })
 
     const handleModal = () => {
         if (modalDelete === false) {
@@ -61,8 +72,8 @@ const Client = ({clientInfo, context} : ClientInterface) => {
 
     return (
         <Layout>
-            {modalRegister ? <ModalRegister closeFun={setRegister} /> : <></>}
-            {modalDelete ? <ModalDelete id={clientInfo.client.id} text={textModal} closeFun={setDelete} /> : <></>}
+            {modalRegister ? <ModalRegister clientId={router.query.id as string} closeFun={setRegister} /> : <></>}
+            {modalDelete ? <ModalDelete clientPage={true} id={Router.query.id as string} text={textModal} closeFun={setDelete} /> : <></>}
             <section className={classNames('p-12 flex flex-col gap-4', {
                 'col-span-10': active,
                 'col-span-11': !active,
@@ -81,28 +92,28 @@ const Client = ({clientInfo, context} : ClientInterface) => {
                     <div className="col-span-6 flex flex-col gap-6">
                         <div className="grid grid-cols-12 gap-4">
                             <h2 className="font-semibold col-span-12">Informações pessoais</h2>
-                            <span className="col-span-6 text-sm font-semibold" >Nome: <span className="font-normal text-gray-500">{clientInfo.client.name}</span></span>
-                            <span className="col-span-6 text-sm font-semibold" >Sobrenome: <span className="font-normal text-gray-500">{clientInfo.client.email}</span></span>
-                            <span className="col-span-6 text-sm font-semibold" >Número de celular: <span className="font-normal text-gray-500">{clientInfo.client.phoneNumber}</span></span>
-                            <span className="col-span-6 text-sm font-semibold" >Idade: <span className="font-normal text-gray-500">{clientInfo.client.age}</span></span>
+                            <span className="col-span-6 text-sm font-semibold" >Nome: <span className="font-normal text-gray-500">{data?.client.name}</span></span>
+                            <span className="col-span-6 text-sm font-semibold" >Sobrenome: <span className="font-normal text-gray-500">{data?.client.email}</span></span>
+                            <span className="col-span-6 text-sm font-semibold" >Número de celular: <span className="font-normal text-gray-500">{data?.client.phoneNumber}</span></span>
+                            <span className="col-span-6 text-sm font-semibold" >Idade: <span className="font-normal text-gray-500">{data?.client.age}</span></span>
                             <hr className="col-span-12" />
                         </div>
                         <div className="grid grid-cols-12 gap-4">
                             <h2 className="font-semibold col-span-12">Informações de endereço</h2>
-                            <span className="col-span-6 text-sm font-semibold" >Cidade: <span className="font-normal text-gray-500">{clientInfo.client.city}</span></span>
-                            <span className="col-span-6 text-sm font-semibold" >Rua e número: <span className="font-normal text-gray-500">{clientInfo.client.address?? 'Não informado.'}</span></span>
-                            <span className="col-span-6 text-sm font-semibold" >Bairro de residência: <span className="font-normal text-gray-500">{clientInfo.client.district?? 'Não informado.'}</span></span>
+                            <span className="col-span-6 text-sm font-semibold" >Cidade: <span className="font-normal text-gray-500">{data?.client.city}</span></span>
+                            <span className="col-span-6 text-sm font-semibold" >Rua e número: <span className="font-normal text-gray-500">{data?.client.address?? 'Não informado.'}</span></span>
+                            <span className="col-span-6 text-sm font-semibold" >Bairro de residência: <span className="font-normal text-gray-500">{data?.client.district?? 'Não informado.'}</span></span>
                             <hr className="col-span-12" />
                         </div>
                         <div className="grid grid-cols-12 gap-4">
                             <h2 className="font-semibold col-span-12">Orçamento</h2>
-                            <span className="col-span-12 text-sm font-semibold" >Orçamento: <span className="font-normal text-gray-500">{clientInfo.client.budget?? 'Não informado.'}</span></span>
-                            <span className="col-span-12 text-sm font-semibold" >Observações: <span className="font-normal text-gray-500">{clientInfo.client.budgetDescription?? 'Não informado.'}</span></span>
+                            <span className="col-span-12 text-sm font-semibold" >Orçamento: <span className="font-normal text-gray-500">{data?.client.budget?? 'Não informado.'}</span></span>
+                            <span className="col-span-12 text-sm font-semibold" >Observações: <span className="font-normal text-gray-500">{data?.client.budgetDescription?? 'Não informado.'}</span></span>
                             <hr className="col-span-12" />
                         </div>
                         <div className="grid grid-cols-12 gap-4">
                             <h2 className="font-semibold col-span-12">Anamnese</h2>
-                            <span className="col-span-12 text-sm font-semibold" >Descrição: <span className="font-normal text-gray-500">{clientInfo.client.anamnese?? 'Não informado.'}</span></span>
+                            <span className="col-span-12 text-sm font-semibold" >Descrição: <span className="font-normal text-gray-500">{data?.client.anamnese?? 'Não informado.'}</span></span>
                         </div>
                     </div>
                     <div className="col-span-6">
@@ -113,15 +124,14 @@ const Client = ({clientInfo, context} : ClientInterface) => {
                 <div className="flex flex-col gap-8">
                     <h1 className="text-xl font-semibold">Consultas realizadas:</h1>
                     <div className="flex flex-col gap-2">
-                        <div className="grid grid-cols-12">
+                         {data?.client.appointments.length > 0 ? <div className="grid grid-cols-12">
                             <span className="text-center col-span-2">Data:</span>
                             <span className="text-center col-span-2">Dente:</span>
                             <span className="text-center col-span-2">Procedimento:</span>
-                        </div>
+                        </div> : <></>}
+                        
                         <div className="flex flex-col gap-2">
-                            <AppointmentItem isModalActive={modalRegister} setText={setText} funModal={setDelete} />
-                            <AppointmentItem isModalActive={modalRegister} setText={setText} funModal={setDelete} />
-                            <AppointmentItem isModalActive={modalRegister} setText={setText} funModal={setDelete} />
+                            {data?.client.appointments.map((appointment :AppointmentInterface) => <AppointmentItem info={appointment} isModalActive={modalRegister} setText={setText} funModal={setDelete} />)}
                         </div>
                     </div>
                     <div className="flex justify-end">
@@ -135,21 +145,3 @@ const Client = ({clientInfo, context} : ClientInterface) => {
 }
 
 export default Client
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-
-    const id = context.query['id']
-
-    const { data } = await client.query({
-        query: LOAD_INFO,
-        variables: {
-            id: id
-        }
-    })
-
-    return {
-        props: {
-            clientInfo: data
-        }
-    }
-}

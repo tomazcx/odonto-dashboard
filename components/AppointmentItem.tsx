@@ -1,3 +1,4 @@
+import { info } from "console";
 import { useContext } from "react"
 import Trash from "../assets/Trash"
 import { modalContext } from "../services/modalContext"
@@ -6,9 +7,14 @@ interface ItemInterface{
     funModal (value: boolean):void;
     setText(text:string):void;
     isModalActive: boolean;
+    info: {
+        date: string;
+        teeth: string;
+        proccedure: string;
+    }
 }
 
-const AppointmentItem = ({funModal, setText, isModalActive} : ItemInterface) => {
+const AppointmentItem = ({funModal, setText, isModalActive, info} : ItemInterface) => {
 
     const {setModal} = useContext(modalContext)
 
@@ -22,9 +28,9 @@ const AppointmentItem = ({funModal, setText, isModalActive} : ItemInterface) => 
 
     return (
         <div className="grid grid-cols-12 bg-gray-100 rounded-md py-1">
-            <span className="text-center col-span-2">22/08/2022</span>
-            <span className="text-center col-span-2">28</span>
-            <span className="text-center col-span-2">exo</span>
+            <span className="text-center col-span-2">{info.date}</span>
+            <span className="text-center col-span-2">{info.teeth}</span>
+            <span className="text-center col-span-2">{info.proccedure}</span>
             <div onClick={() =>handleModal()} className="col-span-2 col-start-12 cursor-pointer">
                 <Trash />
             </div>

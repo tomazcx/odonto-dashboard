@@ -16,6 +16,12 @@ query MyQuery($id: ID!) {
     id
     name
     phoneNumber
+    appointments{
+      date
+      teeth
+      proccedure
+      id
+    }
   }
 }
 `
