@@ -3,10 +3,8 @@ import X from "../assets/X";
 import Input from "./Input";
 import Button from "./Button";
 import { useContext, useState } from "react";
-import { modalContext } from "../services/modalContext";
 import { CREATE_APPOINTMENT } from "../graphql/mutations/createAppointment";
 import { useMutation } from "@apollo/client";
-import { LOAD_CLIENTS } from "../graphql/queries/getClients";
 import { LOAD_INFO } from "../graphql/queries/getClientInfo";
 
 interface ModalInterface {
@@ -16,7 +14,6 @@ interface ModalInterface {
 
 const ModalRegister = ({ closeFun, clientId }: ModalInterface) => {
 
-    const {setModal} = useContext(modalContext)
     const [formData, setData] = useState<{ [key: string]: any }>({})
     
     const handleInput = (e: any) => {
@@ -32,7 +29,6 @@ const ModalRegister = ({ closeFun, clientId }: ModalInterface) => {
 
 
     const handleModal = () =>{
-        setModal(false)
         closeFun(false)
     }
 
@@ -48,9 +44,6 @@ const ModalRegister = ({ closeFun, clientId }: ModalInterface) => {
 
     
     const handleRegister = () => {
-
-        console.log(formData)
-
         registerAppointment({
             variables: {
                 date: formData.date,
@@ -64,7 +57,7 @@ const ModalRegister = ({ closeFun, clientId }: ModalInterface) => {
 
 
     return (
-        <div className="fixed z-20 w-1/2 top-[20px] rounded-lg left-1/2 transform -translate-x-1/2 gap-4 bg-gray-100 p-8 flex flex-col">
+        <> 
             <div className="flex items-center justify-between">
                 <h1 className="text-xl">Registrar consulta</h1>
                 <div className="cursor-pointer" onClick={() => handleModal()}>
@@ -81,7 +74,7 @@ const ModalRegister = ({ closeFun, clientId }: ModalInterface) => {
                 <Button funClick={resetForm} text="Resetar campos" isBlue={false}  isLink={false} />
                 <Button funClick={handleRegister} text="Cadastrar" isBlue={true}  isLink={false} />
             </div>
-        </div>
+        </>
     )
 }
 

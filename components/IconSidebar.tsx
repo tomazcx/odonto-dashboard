@@ -2,9 +2,7 @@ import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactNode, useContext } from "react";
-import { Url } from "url";
 import { AsideContext } from "../services/asideContext";
-import { modalContext } from "../services/modalContext";
 
 interface IconInterface {
     icon: ReactNode;
@@ -18,7 +16,6 @@ interface IconInterface {
 const IconSidebar = (props: IconInterface) => {
 
     const { active, setActive } = useContext(AsideContext)
-    const {setModal} = useContext(modalContext)
     const router = useRouter().pathname
 
     return (
@@ -31,13 +28,12 @@ const IconSidebar = (props: IconInterface) => {
                         })}
                     onMouseEnter={() => props.setHover(true)}
                     onMouseLeave={() => props.setHover(false)}
-                    onClick={() => setModal(false)}
                     >
                     {props.icon}
                     {props.hoverActive ? props.hoverBox : <></>}
                 </a> :
                 <a
-                    onClick={() => {setActive(false); setModal(false)}}
+                    onClick={() => {setActive(false)}}
                     className={classNames("flex  items-center w-full gap-4 px-4 cursor-pointer rounded-full p-2 transition-colors hover:bg-blue-500", {
                         "bg-blue-500": router === props.path
                     })}>

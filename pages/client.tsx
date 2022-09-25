@@ -7,13 +7,12 @@ import { AsideContext } from "../services/asideContext"
 import odontograma from '../assets/odontograma.png'
 import AppointmentItem from "../components/AppointmentItem"
 import ModalRegister from "../components/ModalRegister"
-import { modalContext } from "../services/modalContext"
 import classNames from "classnames"
 import ModalDelete from "../components/ModalDelete"
-import Router, { useRouter } from "next/router"
-import { client } from "../lib/apollo"
+import { useRouter } from "next/router"
 import { LOAD_INFO } from "../graphql/queries/getClientInfo"
-import { gql, useQuery } from "@apollo/client"
+import { useQuery } from "@apollo/client"
+import Modal from 'react-modal'
 
 interface AppointmentInterface{
     date: string;
@@ -21,30 +20,11 @@ interface AppointmentInterface{
     proccedure:string;
 }
 
-interface ClientInterface{
-    client: {
-        name: string;
-        age:number;
-        email:string;
-        address?: string;
-        anamnese?: string;
-        budget?: string;
-        budgetDescription?:string;
-        city:string;
-        clientSlug:string;
-        district?:string;
-        phoneNumber:string;
-        id: string;
-        appointment: AppointmentInterface
-    }
-}
-
 const Client = () => {
 
     const [modalRegister, setRegister] = useState(false)
     const [modalDelete, setDelete] = useState(false)
     const { active } = useContext(AsideContext)
-    const { modal, setModal } = useContext(modalContext)
     const [textModal, setText] = useState('')
 
     const router = useRouter()
@@ -58,26 +38,35 @@ const Client = () => {
     const handleModal = () => {
         if (modalDelete === false) {
             setRegister(true)
-            setModal(true)
         }
     }
 
     const handleModalDelete = () => {
         if (modalRegister === false) {
             setDelete(true)
-            setModal(true)
             setText('o paciente?')
         }
     }
 
     return (
         <Layout>
-            {modalRegister ? <ModalRegister clientId={router.query.id as string} closeFun={setRegister} /> : <></>}
-            {modalDelete ? <ModalDelete clientPage={true} id={Router.query.id as string} text={textModal} closeFun={setDelete} /> : <></>}
+            <Modal
+                isOpen={modalRegister}
+                className="fixed z-20 w-1/2 top-[20px] rounded-lg left-1/2 transform -translate-x-1/2 gap-4 bg-gray-100 p-8 flex flex-col"
+                contentLable="Delete Modal"
+            >
+                <ModalRegister clientId={router.query.id as string} closeFun={setRegister} /> 
+            </Modal>
+            <Modal
+                isOpen={modalDelete}
+                className="fixed top-[200px] z-20 left-1/2 transform gap-4 rounded-lg -translate-x-1/2 bg-gray-200 flex flex-col p-4"
+                contentLable="Delete Modal"
+            >
+                <ModalDelete clientPage={true} id={router.query.id as string} closeFun={setDelete} text={textModal} />
+            </Modal>
             <section className={classNames('p-12 flex flex-col gap-4', {
                 'col-span-10': active,
-                'col-span-11': !active,
-                'opacity-50': modal
+                'col-span-11': !active
             })}>
                 <div className="flex w-full justify-between">
                     <h1 className="text-xl font-semibold">Dados do paciente</h1>

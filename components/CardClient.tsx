@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { useContext } from "react";
-import { modalContext } from "../services/modalContext";
 
 interface ClientInterface {
     deleteModal(id: string): void;
@@ -16,10 +15,7 @@ interface ClientInterface {
 
 const CardClient = ({ deleteModal, info }: ClientInterface) => {
 
-    const { setModal } = useContext(modalContext)
-
     const handleDelete = () => {
-        setModal(true)
         deleteModal(info.id)
     }
 
@@ -34,7 +30,7 @@ const CardClient = ({ deleteModal, info }: ClientInterface) => {
                 <span className="col-span-2 font-semibold">Celular:</span>  <span className="col-span-4 text-gray-500">{info.phoneNumber}</span>
             </div>
             <Link href={{ pathname: 'client', query: { id: info.id } }} passHref>
-                <a onClick={() => setModal(false)} className="text-blue-400 text-sm hover:text-blue-500 transition-colors text-center">Ver detalhes e consultas</a>
+                <a className="text-blue-400 text-sm hover:text-blue-500 transition-colors text-center">Ver detalhes e consultas</a>
             </Link>
             <span onClick={() => handleDelete()} className="text-red-400 text-center text-sm cursor-pointer hover:text-red-500 transition-colors">Excluir</span>
         </div>

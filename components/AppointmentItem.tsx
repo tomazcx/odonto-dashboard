@@ -1,7 +1,4 @@
-import { info } from "console";
-import { useContext } from "react"
 import Trash from "../assets/Trash"
-import { modalContext } from "../services/modalContext"
 
 interface ItemInterface{
     funModal (value: boolean):void;
@@ -16,11 +13,9 @@ interface ItemInterface{
 
 const AppointmentItem = ({funModal, setText, isModalActive, info} : ItemInterface) => {
 
-    const {setModal} = useContext(modalContext)
 
     const handleModal = () =>{
         if(isModalActive === false){
-            setModal(true)
             funModal(true)
             setText('a consulta?')
         }

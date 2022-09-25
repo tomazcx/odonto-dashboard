@@ -1,6 +1,3 @@
-import classNames from "classnames"
-import { ReactNode, useContext } from "react"
-import { modalContext } from "../services/modalContext"
 import { Aside } from "./Aside"
 import { Header } from "./Header"
 
@@ -9,8 +6,6 @@ interface ChildInterface {
 }
 
 const Layout = ({children}: ChildInterface) => {
-
-    const {modal} = useContext(modalContext)
 
     return (
         <div>

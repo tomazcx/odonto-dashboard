@@ -1,6 +1,5 @@
 import classNames from "classnames"
-import { GetServerSideProps, NextPage } from "next"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import List from "../assets/List"
 import SquaresFour from "../assets/SquaresFour"
 import GridClients from "../components/GridClients"
@@ -8,11 +7,9 @@ import Layout from "../components/Layout"
 import ListClients from "../components/ListClients"
 import ModalDelete from "../components/ModalDelete"
 import SearchInput from "../components/SearchInput"
-import Select from "../components/Select"
 import { AsideContext } from "../services/asideContext"
-import { modalContext } from "../services/modalContext"
-import { client } from '../lib/apollo'
 import { LOAD_CLIENTS } from "../graphql/queries/getClients"
+import Modal from 'react-modal'
 import { useQuery } from "@apollo/client"
 
 interface ClientInterface {
@@ -35,13 +32,11 @@ const Clients = () => {
     const [searchText, setText] = useState("")
 
     const { active } = useContext(AsideContext)
-    const { modal } = useContext(modalContext)
 
     const deleteModal = (id: string) => {
         setDelete(true)
         setId(id)
     }
-
 
     const { data } = useQuery(LOAD_CLIENTS)
 
@@ -50,11 +45,16 @@ const Clients = () => {
 
     return (
         <Layout>
-            {modalDelete ? <ModalDelete clientPage={false} id={idToDelete} closeFun={setDelete} text='o paciente?' /> : <></>}
+            <Modal
+                isOpen={modalDelete}
+                className="fixed top-[200px] z-20 left-1/2 transform gap-4 rounded-lg -translate-x-1/2 bg-gray-200 flex flex-col p-4"
+                contentLable="Delete Modal"
+            >
+                <ModalDelete clientPage={false} id={idToDelete} closeFun={setDelete} text='o paciente?' />
+            </Modal>
             <section className={classNames("p-12 flex flex-col gap-12", {
                 'col-span-10': active,
-                'col-span-11': !active,
-                'opacity-50': modal
+                'col-span-11': !active
             })}>
                 <div className="flex w-full justify-between items-center">
                     <h1 className="text-xl">Pacientes Cadastrados</h1>

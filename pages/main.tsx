@@ -1,9 +1,8 @@
 import { NextPage } from "next";
-import Link from "next/link";
 import { useContext } from "react";
 import Button from "../components/Button";
 import Layout from "../components/Layout";
-import { AsideContext, AsideProvider } from "../services/asideContext";
+import { AsideContext } from "../services/asideContext";
 
 const Main: NextPage = () => {
 
