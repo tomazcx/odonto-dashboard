@@ -2,22 +2,23 @@ import Trash from "../assets/Trash"
 
 interface ItemInterface{
     funModal (value: boolean):void;
-    setText(text:string):void;
     isModalActive: boolean;
+    setId(id:string):void
     info: {
+        id:string;
         date: string;
         teeth: string;
         proccedure: string;
     }
 }
 
-const AppointmentItem = ({funModal, setText, isModalActive, info} : ItemInterface) => {
+const AppointmentItem = ({funModal, isModalActive, info, setId} : ItemInterface) => {
 
 
     const handleModal = () =>{
         if(isModalActive === false){
+            setId(info.id)
             funModal(true)
-            setText('a consulta?')
         }
     }
 

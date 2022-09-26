@@ -11,6 +11,7 @@ import { AsideContext } from "../services/asideContext"
 import { LOAD_CLIENTS } from "../graphql/queries/getClients"
 import Modal from 'react-modal'
 import { useQuery } from "@apollo/client"
+import Select from "../components/Select"
 
 interface ClientInterface {
     clientSlug: string;
@@ -22,6 +23,10 @@ interface ClientInterface {
     id: string;
 }
 
+interface ClientsInterface {
+    clients: ClientInterface[]
+}
+
 const Clients = () => {
 
     const [hoverList, setHoverList] = useState(false)
@@ -30,6 +35,7 @@ const Clients = () => {
     const [modalDelete, setDelete] = useState(false)
     const [idToDelete, setId] = useState('')
     const [searchText, setText] = useState("")
+    const [orderBy, setOrderBy] = useState(0)
 
     const { active } = useContext(AsideContext)
 
@@ -38,9 +44,29 @@ const Clients = () => {
         setId(id)
     }
 
-    const { data } = useQuery(LOAD_CLIENTS)
+    let clientsArray: ClientsInterface
+    let variableOrder = ""
 
-    let clients: ClientInterface[] = searchText.length > 0 ? data?.clients.filter((client: ClientInterface) => client.name.toLowerCase().includes(searchText.toLowerCase())) : []
+    switch (orderBy) {
+        case 1:
+            variableOrder = 'publishedAt_ASC'
+            break;
+        case 2:
+            variableOrder = 'name_ASC'
+            break;
+        case 3:
+            variableOrder = 'age_DESC'
+            break; 
+        case 4:
+            variableOrder = 'age_ASC'
+            break; 
+        default:
+            variableOrder = 'publishedAt_DESC'
+            break
+    }
+    clientsArray = useQuery(LOAD_CLIENTS, { variables: { order: variableOrder } }).data
+
+    let clients: ClientInterface[] = searchText.length > 0 ? clientsArray?.clients.filter((client: ClientInterface) => client.name.toLowerCase().includes(searchText.toLowerCase())) : []
 
 
     return (
@@ -50,7 +76,7 @@ const Clients = () => {
                 className="fixed top-[200px] z-20 left-1/2 transform gap-4 rounded-lg -translate-x-1/2 bg-gray-200 flex flex-col p-4"
                 contentLable="Delete Modal"
             >
-                <ModalDelete clientPage={false} id={idToDelete} closeFun={setDelete} text='o paciente?' />
+                <ModalDelete isClient={true} orderToRefetch={variableOrder} clientPage={false} id={idToDelete} closeFun={setDelete} text='o paciente?' />
             </Modal>
             <section className={classNames("p-12 flex flex-col gap-12", {
                 'col-span-10': active,
@@ -59,6 +85,7 @@ const Clients = () => {
                 <div className="flex w-full justify-between items-center">
                     <h1 className="text-xl">Pacientes Cadastrados</h1>
                     <div className="flex gap-4 items-center">
+                        <Select funFilter={setOrderBy} />
                         <SearchInput funSearch={setText} />
                         <div className="flex gap-4 items-center">
                             <div className="cursor-pointer"
@@ -79,7 +106,7 @@ const Clients = () => {
                     </div>
                 </div>
 
-                {showingList ? <ListClients deleteModal={deleteModal} list={searchText.length > 0 ? clients : data?.clients} /> : <GridClients deleteModal={deleteModal} list={searchText.length > 0 ? clients : data?.clients} />}
+                {showingList ? <ListClients deleteModal={deleteModal} list={searchText.length > 0 ? clients : clientsArray?.clients} /> : <GridClients deleteModal={deleteModal} list={searchText.length > 0 ? clients : clientsArray?.clients} />}
             </section>
         </Layout>
     )

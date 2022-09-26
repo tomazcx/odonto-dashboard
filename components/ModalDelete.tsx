@@ -1,28 +1,36 @@
 import { useMutation } from "@apollo/client";
 import Router from "next/router";
-import { useContext } from "react";
+import { DELETE_APPOINTMENT } from "../graphql/mutations/deleteAppointment";
 import { DELETE_CLIENT } from "../graphql/mutations/deleteClient";
+import { LOAD_INFO } from "../graphql/queries/getClientInfo";
 import { LOAD_CLIENTS } from "../graphql/queries/getClients";
 import Button from "./Button";
+
 
 interface ModalInterface {
     closeFun(value: boolean): void;
     id: string;
     text: string;
     clientPage: boolean;
+    isClient: boolean;
+    idClient?:string;
+    orderToRefetch?: string;
 }
 
-const ModalDelete = ({ closeFun, text, id, clientPage }: ModalInterface) => {
+const ModalDelete = ({ closeFun, text, idClient, id, clientPage, isClient, orderToRefetch }: ModalInterface) => {
 
     const [deleteClient] = useMutation(DELETE_CLIENT)
+    const [deleteAppointment] = useMutation(DELETE_APPOINTMENT)
 
-    const handleModal = (e: any) => {
+    const handleModal = () => {
         closeFun(false)
     }
 
     const handleDelete = () =>{
-        deleteClient({variables: {id: id},refetchQueries:[{query:LOAD_CLIENTS}]})
-        handleModal(<></>)
+        handleModal()
+        if(!isClient) return deleteAppointment({variables: {id: id}, refetchQueries:[{query:LOAD_INFO, variables:{id:idClient}}]})
+        
+        deleteClient({variables: {id: id},refetchQueries:[{query:LOAD_CLIENTS, variables:{order:orderToRefetch??'publishedAt_DESC'}}]})
         if(clientPage) Router.push("/clients")
     }
 

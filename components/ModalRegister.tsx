@@ -2,10 +2,12 @@ import TextArea from "./Textarea";
 import X from "../assets/X";
 import Input from "./Input";
 import Button from "./Button";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { CREATE_APPOINTMENT } from "../graphql/mutations/createAppointment";
 import { useMutation } from "@apollo/client";
 import { LOAD_INFO } from "../graphql/queries/getClientInfo";
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 interface ModalInterface {
     closeFun(value: boolean): void;
@@ -15,7 +17,7 @@ interface ModalInterface {
 const ModalRegister = ({ closeFun, clientId }: ModalInterface) => {
 
     const [formData, setData] = useState<{ [key: string]: any }>({})
-    
+
     const handleInput = (e: any) => {
         const name = e.target.name
         let value = e.target.value
@@ -28,7 +30,7 @@ const ModalRegister = ({ closeFun, clientId }: ModalInterface) => {
     }
 
 
-    const handleModal = () =>{
+    const handleModal = () => {
         closeFun(false)
     }
 
@@ -42,7 +44,7 @@ const ModalRegister = ({ closeFun, clientId }: ModalInterface) => {
         input.reset()
     }
 
-    
+
     const handleRegister = () => {
         registerAppointment({
             variables: {
@@ -51,13 +53,14 @@ const ModalRegister = ({ closeFun, clientId }: ModalInterface) => {
                 proccedure: formData.desc,
                 clientID: clientId
             },
-            refetchQueries: [{query: LOAD_INFO, variables:{id:clientId}}]
+            refetchQueries: [{ query: LOAD_INFO, variables: { id: clientId } }]
         })
     }
 
 
     return (
-        <> 
+        <>
+            <ToastContainer autoClose={500} pauseOnHover={false} hideProgressBar={true} />
             <div className="flex items-center justify-between">
                 <h1 className="text-xl">Registrar consulta</h1>
                 <div className="cursor-pointer" onClick={() => handleModal()}>
@@ -71,8 +74,8 @@ const ModalRegister = ({ closeFun, clientId }: ModalInterface) => {
                 <TextArea funChange={handleInput} text="Procedimento" required={true} bg="bg-white" id="desc" />
             </form>
             <div className="flex items-center justify-end gap-4">
-                <Button funClick={resetForm} text="Resetar campos" isBlue={false}  isLink={false} />
-                <Button funClick={handleRegister} text="Cadastrar" isBlue={true}  isLink={false} />
+                <Button funClick={resetForm} text="Resetar campos" isBlue={false} isLink={false} />
+                <Button funClick={handleRegister} text="Cadastrar" isBlue={true} isLink={false} />
             </div>
         </>
     )

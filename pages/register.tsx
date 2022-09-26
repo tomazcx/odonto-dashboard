@@ -21,7 +21,7 @@ const Register = () => {
         onCompleted: () => {
             toast("Paciente cadastrado com sucesso!")
         },
-        refetchQueries: [{query: LOAD_CLIENTS}]
+        refetchQueries: [{query: LOAD_CLIENTS, variables:{order: 'publishedAt_DESC'}}]
     })
 
 

@@ -17,7 +17,7 @@ const Main: NextPage = () => {
                     <h2 className="text-center">Realize o cadastro dos dados de seus pacientes <br /> e acompanhe suas consultas.</h2>
                     <div className="flex gap-4">
                         <Button text='Cadastrados' isBlue={true} isLink={true} path='/clients' />
-                        <Button text='Cadastrados' isBlue={true} isLink={true} path='/register' />
+                        <Button text='Cadastrar' isBlue={true} isLink={true} path='/register' />
                     </div>
                 </div>
             </section>
