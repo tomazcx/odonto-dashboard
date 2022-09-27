@@ -14,10 +14,9 @@ interface ModalInterface {
     clientPage: boolean;
     isClient: boolean;
     idClient?:string;
-    orderToRefetch?: string;
 }
 
-const ModalDelete = ({ closeFun, text, idClient, id, clientPage, isClient, orderToRefetch }: ModalInterface) => {
+const ModalDelete = ({ closeFun, text, idClient, id, clientPage, isClient }: ModalInterface) => {
 
     const [deleteClient] = useMutation(DELETE_CLIENT)
     const [deleteAppointment] = useMutation(DELETE_APPOINTMENT)
@@ -30,7 +29,7 @@ const ModalDelete = ({ closeFun, text, idClient, id, clientPage, isClient, order
         handleModal()
         if(!isClient) return deleteAppointment({variables: {id: id}, refetchQueries:[{query:LOAD_INFO, variables:{id:idClient}}]})
         
-        deleteClient({variables: {id: id},refetchQueries:[{query:LOAD_CLIENTS, variables:{order:orderToRefetch??'publishedAt_DESC'}}]})
+        deleteClient({variables: {id: id},refetchQueries:[{query:LOAD_CLIENTS}]})
         if(clientPage) Router.push("/clients")
     }
 
