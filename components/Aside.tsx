@@ -25,7 +25,7 @@ export const Aside = () => {
                 hoverBox={<BoxHover text={'Página Inicial'} />}
                 hoverActive={hoverHome}
                 setHover={setHome}
-                path={'/main'}
+                path={'/dashboard/main'}
                 text={'Página Inicial'}
             />
             <IconSidebar
@@ -33,7 +33,7 @@ export const Aside = () => {
                 hoverBox={<BoxHover text={'Pacientes'} />}
                 hoverActive={hoverClients}
                 setHover={setClients}
-                path={'/clients'}
+                path={'/dashboard/clients'}
                 text={'Pacientes'}
             />
             <IconSidebar
@@ -41,7 +41,7 @@ export const Aside = () => {
                 hoverBox={<BoxHover text={'Cadastrar'} />}
                 hoverActive={hoverRegister}
                 setHover={setRegister}
-                path={'/register'}
+                path={'/dashboard/register'}
                 text={'Cadastrar'}
             />
         </aside>

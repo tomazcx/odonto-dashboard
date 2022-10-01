@@ -1,18 +1,19 @@
 import Image from "next/image"
 import { useContext, useState } from "react"
-import Button from "../components/Button"
-import Layout from "../components/Layout"
-import { AsideContext } from "../services/asideContext"
-import odontograma from '../assets/odontograma.png'
-import AppointmentItem from "../components/AppointmentItem"
-import ModalRegister from "../components/ModalRegister"
+import Button from "../../components/Button"
+import Layout from "../../components/Layout"
+import { AsideContext } from "../../services/asideContext"
+import odontograma from '../../assets/odontograma.png'
+import AppointmentItem from "../../components/AppointmentItem"
+import ModalRegister from "../../components/ModalRegister"
 import classNames from "classnames"
-import ModalDelete from "../components/ModalDelete"
+import ModalDelete from "../../components/ModalDelete"
 import { useRouter } from "next/router"
-import { LOAD_INFO } from "../graphql/queries/getClientInfo"
+import { LOAD_INFO } from "../../graphql/queries/getClientInfo"
 import { useQuery } from "@apollo/client"
 import Modal from 'react-modal'
 import Link from "next/link"
+import { ModalEdit } from "../../components/ModalEdit"
 
 
 interface AppointmentInterface {
@@ -27,6 +28,7 @@ const Client = () => {
     const [modalRegister, setRegister] = useState(false)
     const [modalDelete, setDelete] = useState(false)
     const [modalDeleteAppointment, setDeleteAppointment] = useState(false)
+    const [modalEdit, setModalEdit] = useState(false)
     const { active } = useContext(AsideContext)
     const [idAppointment, setId] = useState('')
 
@@ -39,15 +41,15 @@ const Client = () => {
     })
 
     const handleModal = () => {
-        if (modalDelete === false) {
-            setRegister(true)
-        }
+        setRegister(true)
     }
 
     const handleModalDelete = () => {
-        if (modalRegister === false) {
-            setDelete(true)
-        }
+        setDelete(true)
+    }
+
+    const handleModalEdit = () => {
+        setModalEdit(true)
     }
 
     if (error) return (
@@ -69,6 +71,7 @@ const Client = () => {
         <Layout>
             <Modal
                 isOpen={modalRegister}
+                ariaHideApp={false}
                 className="fixed z-20 w-1/2 top-[20px] rounded-lg left-1/2 transform -translate-x-1/2 gap-4 bg-gray-100 p-8 flex flex-col"
                 contentLable="Delete Modal"
             >
@@ -76,6 +79,7 @@ const Client = () => {
             </Modal>
             <Modal
                 isOpen={modalDelete}
+                ariaHideApp={false}
                 className="fixed top-[200px] z-20 left-1/2 transform gap-4 rounded-lg -translate-x-1/2 bg-gray-200 flex flex-col p-4"
                 contentLable="Delete Modal"
             >
@@ -83,10 +87,18 @@ const Client = () => {
             </Modal>
             <Modal
                 isOpen={modalDeleteAppointment}
+                ariaHideApp={false}
                 className="fixed top-[200px] z-20 left-1/2 transform gap-4 rounded-lg -translate-x-1/2 bg-gray-200 flex flex-col p-4"
                 contentLable="Delete Modal"
             >
                 <ModalDelete idClient={router.query.id as string} isClient={false} clientPage={true} id={idAppointment} closeFun={setDeleteAppointment} text={'a consulta?'} />
+            </Modal>
+            <Modal
+                isOpen={modalEdit}
+                ariaHideApp={false}
+                contentLable="Edit Modal"
+            >
+                <ModalEdit funModal={setModalEdit} info={data?.client} id={router.query.id as string} />
             </Modal>
             <section className={classNames('p-12 flex flex-col gap-4', {
                 'col-span-10': active,
@@ -96,7 +108,7 @@ const Client = () => {
                     <h1 className="text-xl font-semibold">Dados do paciente</h1>
 
                     <div className="flex items-center gap-4">
-                        <Button text="Editar informações" isLink={false} isBlue={true} />
+                        <Button funClick={handleModalEdit} text="Editar informações" isLink={false} isBlue={true} />
                         <Button funClick={handleModalDelete} text="Excluir paciente" isLink={false} isBlue={false} />
                     </div>
                 </div>
@@ -106,7 +118,7 @@ const Client = () => {
                         <div className="grid grid-cols-12 gap-4">
                             <h2 className="font-semibold col-span-12">Informações pessoais</h2>
                             <span className="col-span-6 text-sm font-semibold" >Nome: <span className="font-normal text-gray-500">{data?.client.name}</span></span>
-                            <span className="col-span-6 text-sm font-semibold" >Sobrenome: <span className="font-normal text-gray-500">{data?.client.email}</span></span>
+                            <span className="col-span-6 text-sm font-semibold" >Email: <span className="font-normal text-gray-500">{data?.client.email?? "Não informado."}</span></span>
                             <span className="col-span-6 text-sm font-semibold" >Número de celular: <span className="font-normal text-gray-500">{data?.client.phoneNumber}</span></span>
                             <span className="col-span-6 text-sm font-semibold" >Idade: <span className="font-normal text-gray-500">{data?.client.age}</span></span>
                             <hr className="col-span-12" />
@@ -144,7 +156,7 @@ const Client = () => {
                         </div> : <></>}
 
                         <div className="flex flex-col gap-2">
-                            {data?.client.appointments.map((appointment: AppointmentInterface) => <AppointmentItem setId={setId} info={appointment} isModalActive={modalRegister} funModal={setDeleteAppointment} />)}
+                            {data?.client.appointments.map((appointment: AppointmentInterface) => <AppointmentItem key={appointment.id} setId={setId} info={appointment} isModalActive={modalRegister} funModal={setDeleteAppointment} />)}
                         </div>
                     </div>
                     <div className="flex justify-end">

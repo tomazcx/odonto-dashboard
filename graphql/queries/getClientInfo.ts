@@ -9,7 +9,6 @@ query MyQuery($id: ID!) {
     budget
     budgetDescription
     city
-    clientSlug
     createdAt
     district
     email

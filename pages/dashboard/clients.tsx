@@ -1,17 +1,16 @@
 import classNames from "classnames"
 import { useContext, useState } from "react"
-import List from "../assets/List"
-import SquaresFour from "../assets/SquaresFour"
-import GridClients from "../components/GridClients"
-import Layout from "../components/Layout"
-import ListClients from "../components/ListClients"
-import ModalDelete from "../components/ModalDelete"
-import SearchInput from "../components/SearchInput"
-import { AsideContext } from "../services/asideContext"
-import { LOAD_CLIENTS } from "../graphql/queries/getClients"
+import List from "../../assets/List"
+import SquaresFour from "../../assets/SquaresFour"
+import GridClients from "../../components/GridClients"
+import Layout from "../../components/Layout"
+import ListClients from "../../components/ListClients"
+import ModalDelete from "../../components/ModalDelete"
+import SearchInput from "../../components/SearchInput"
+import { AsideContext } from "../../services/asideContext"
+import { LOAD_CLIENTS } from "../../graphql/queries/getClients"
 import Modal from 'react-modal'
 import { useQuery } from "@apollo/client"
-import Select from "../components/Select"
 
 interface ClientInterface {
     clientSlug: string;
@@ -52,6 +51,7 @@ const Clients = () => {
         <Layout>
             <Modal
                 isOpen={modalDelete}
+                ariaHideApp={false}
                 className="fixed top-[200px] z-20 left-1/2 transform gap-4 rounded-lg -translate-x-1/2 bg-gray-200 flex flex-col p-4"
                 contentLable="Delete Modal"
             >

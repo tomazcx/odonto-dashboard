@@ -1,16 +1,16 @@
 import { FormEvent, useContext, useState } from "react"
-import TextArea from "../components/Textarea"
-import TitleForm from "../components/TitleForm"
-import Input from "../components/Input"
-import Layout from "../components/Layout"
-import { AsideContext } from "../services/asideContext"
-import Button from "../components/Button"
-import { CREATE_CLIENT } from "../graphql/mutations/createClient"
+import TextArea from "../../components/Textarea"
+import TitleForm from "../../components/TitleForm"
+import Input from "../../components/Input"
+import Layout from "../../components/Layout"
+import { AsideContext } from "../../services/asideContext"
+import Button from "../../components/Button"
+import { CREATE_CLIENT } from "../../graphql/mutations/createClient"
 import { useMutation } from "@apollo/client"
 import { ToastContainer, toast } from 'react-toastify'
 import accents from 'remove-accents'
 import 'react-toastify/dist/ReactToastify.css'
-import { LOAD_CLIENTS } from "../graphql/queries/getClients"
+import { LOAD_CLIENTS } from "../../graphql/queries/getClients"
 
 const Register = () => {
 
@@ -21,7 +21,7 @@ const Register = () => {
         onCompleted: () => {
             toast("Paciente cadastrado com sucesso!")
         },
-        refetchQueries: [{query: LOAD_CLIENTS}]
+        refetchQueries: [{ query: LOAD_CLIENTS }]
     })
 
 
@@ -45,22 +45,9 @@ const Register = () => {
     const handleSubmit = (e: FormEvent) => {
 
         e.preventDefault()
-        const slug = accents.remove(formData.name.toLowerCase().replaceAll(" ", "-"))
         createClient(
             {
-                variables: {
-                    slug: slug,
-                    address: formData.address,
-                    age: formData.age,
-                    budget: formData.budget,
-                    city: formData.city,
-                    budgetDescription: formData.budgetDescription,
-                    district: formData.district,
-                    email: formData.email,
-                    name: formData.name,
-                    phoneNumber: formData.phoneNumber,
-                    anamnese: formData.anamnese,
-                }
+                variables: {...formData}
             }
         )
 
@@ -77,7 +64,7 @@ const Register = () => {
                         <TitleForm text="Informações pessoais" />
                         <div className="col-span-7 grid grid-cols-12 gap-8">
                             <Input text="Nome" funChange={handleInput} required={true} type='text' id="name" />
-                            <Input text="Email" funChange={handleInput} required={true} type='email' id="email" />
+                            <Input text="Email" funChange={handleInput} required={false} type='email' id="email" />
                             <Input text="Idade" funChange={handleInput} required={true} type='number' id="age" />
                             <Input text="Número de Telefone" funChange={handleInput} required={true} type='text' id="phoneNumber" />
                         </div>

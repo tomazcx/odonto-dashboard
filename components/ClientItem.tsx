@@ -25,7 +25,7 @@ const ClientItem = ({deleteModal, info} : ClientInterface) => {
             <span className="col-span-2 text-center">{info.age}</span>
             <span className="col-span-2 text-center">{info.city}</span>
             <span className="col-span-2 text-center">{info.phoneNumber}</span>
-            <Link href={{pathname: '/client', query: {id: info.id}}} passHref>
+            <Link href={{pathname: '/dashboard/client', query: {id: info.id}}} passHref>
                 <a className="col-start-10 col-span-2 text-blue-400 hover:text-blue-500 transition-colors">
                     Ver detalhes e consultas
                 </a>
