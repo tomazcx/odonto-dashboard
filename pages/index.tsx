@@ -12,7 +12,7 @@ const Login: NextPage = () => {
   const router = useRouter()
 
   const handleSignIn =(data : any) => {
-    if(data.password === "a1zeyXaC" && data.login==="fabionx"){
+    if(data.password === process.env.NEXT_PUBLIC_USER_PASSWORD && data.login===process.env.NEXT_PUBLIC_USER_LOGIN){
       const token = uuid()
       setCookie(undefined, 'nextauth.token', token, {
         maxAge: 60*60*8 //8 hours
