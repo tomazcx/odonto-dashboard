@@ -30,7 +30,7 @@ const ModalDelete = ({ closeFun, text, idClient, id, clientPage, isClient }: Mod
         if(!isClient) return deleteAppointment({variables: {id: id}, refetchQueries:[{query:LOAD_INFO, variables:{id:idClient}}]})
         
         deleteClient({variables: {id: id},refetchQueries:[{query:LOAD_CLIENTS}]})
-        if(clientPage) Router.push("/clients")
+        if(clientPage) Router.push("/dashboard/clients")
     }
 
     return (

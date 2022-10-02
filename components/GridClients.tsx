@@ -18,7 +18,7 @@ const GridClients = ({list, deleteModal} : GridInterface) => {
 
     return (
         <div className="grid grid-cols-10 gap-4">
-            {list?.map((client : ClientInterface) => <CardClient info={client} deleteModal={deleteModal} />)}
+            {list?.map((client : ClientInterface) => <CardClient key={client.id} info={client} deleteModal={deleteModal} />)}
         </div>
     )
 }

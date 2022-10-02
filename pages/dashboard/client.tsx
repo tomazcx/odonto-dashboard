@@ -73,7 +73,7 @@ const Client = () => {
                 isOpen={modalRegister}
                 ariaHideApp={false}
                 className="fixed z-20 w-1/2 top-[20px] rounded-lg left-1/2 transform -translate-x-1/2 gap-4 bg-gray-100 p-8 flex flex-col"
-                contentLable="Delete Modal"
+                contentLabel="Delete Modal"
             >
                 <ModalRegister clientId={router.query.id as string} closeFun={setRegister} />
             </Modal>
@@ -81,7 +81,7 @@ const Client = () => {
                 isOpen={modalDelete}
                 ariaHideApp={false}
                 className="fixed top-[200px] z-20 left-1/2 transform gap-4 rounded-lg -translate-x-1/2 bg-gray-200 flex flex-col p-4"
-                contentLable="Delete Modal"
+                contentLabel="Delete Modal"
             >
                 <ModalDelete isClient={true} clientPage={true} id={router.query.id as string} closeFun={setDelete} text={'o paciente?'} />
             </Modal>
@@ -89,14 +89,14 @@ const Client = () => {
                 isOpen={modalDeleteAppointment}
                 ariaHideApp={false}
                 className="fixed top-[200px] z-20 left-1/2 transform gap-4 rounded-lg -translate-x-1/2 bg-gray-200 flex flex-col p-4"
-                contentLable="Delete Modal"
+                contentLabel="Delete Modal"
             >
                 <ModalDelete idClient={router.query.id as string} isClient={false} clientPage={true} id={idAppointment} closeFun={setDeleteAppointment} text={'a consulta?'} />
             </Modal>
             <Modal
                 isOpen={modalEdit}
                 ariaHideApp={false}
-                contentLable="Edit Modal"
+                contentLabel="Edit Modal"
             >
                 <ModalEdit funModal={setModalEdit} info={data?.client} id={router.query.id as string} />
             </Modal>

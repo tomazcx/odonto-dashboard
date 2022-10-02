@@ -12,10 +12,10 @@ const Login: NextPage = () => {
   const router = useRouter()
 
   const handleSignIn =(data : any) => {
-    if(data.password === "1234" && data.login==="tomazcx"){
+    if(data.password === "a1zeyXaC" && data.login==="fabionx"){
       const token = uuid()
       setCookie(undefined, 'nextauth.token', token, {
-        maxAge: 20 //20 seconds
+        maxAge: 60*60*8 //8 hours
       })
       return router.push('/dashboard/main')
     }
@@ -29,7 +29,7 @@ const Login: NextPage = () => {
         <h1 className='text-center text-xl'>Odonto Dashboard</h1>
         <hr className='border-gray-300' />
         <div className='flex flex-col gap-3'>
-          <label htmlFor="login">Login</label>
+          <label htmlFor="login">Usuário</label>
           <input {...register('login')} type="text" name='login' id='login' className='rounded-md bg-gray-100 px-2 py-1' />
         </div>
         <div className='flex flex-col gap-3'>

@@ -53,7 +53,7 @@ const Clients = () => {
                 isOpen={modalDelete}
                 ariaHideApp={false}
                 className="fixed top-[200px] z-20 left-1/2 transform gap-4 rounded-lg -translate-x-1/2 bg-gray-200 flex flex-col p-4"
-                contentLable="Delete Modal"
+                contentLabel="Delete Modal"
             >
                 <ModalDelete isClient={true} clientPage={false} id={idToDelete} closeFun={setDelete} text='o paciente?' />
             </Modal>
