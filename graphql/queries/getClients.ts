@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 export const LOAD_CLIENTS = gql`
 query getClients {
-    clients(orderBy: publishedAt_DESC) {
+    clients(first: 1000, orderBy: publishedAt_DESC) {
         id
         age
         city
