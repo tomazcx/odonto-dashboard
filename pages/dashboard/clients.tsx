@@ -11,6 +11,7 @@ import { AsideContext } from "../../services/asideContext"
 import { LOAD_CLIENTS } from "../../graphql/queries/getClients"
 import Modal from 'react-modal'
 import { useQuery } from "@apollo/client"
+import { client } from "../../lib/apollo"
 
 interface ClientInterface {
     clientSlug: string;
@@ -34,6 +35,7 @@ const Clients = () => {
     const [modalDelete, setDelete] = useState(false)
     const [idToDelete, setId] = useState('')
     const [searchText, setText] = useState("")
+    const [skip, setSkip] = useState(0)
 
     const { active } = useContext(AsideContext)
 
@@ -42,7 +44,19 @@ const Clients = () => {
         setId(id)
     }
 
-    let {data} = useQuery(LOAD_CLIENTS)
+    const handlePagination = (addOperation: boolean) => {
+        if(addOperation && skip + 100 <= 300)
+            return setSkip(prevState => prevState +=100)
+
+        if(skip - 100 >= 0)
+            return setSkip(prevState => prevState -=100)
+    }  
+
+    let { data, refetch } = useQuery(LOAD_CLIENTS, {
+        variables: {
+            skip: skip
+        }
+    })
 
     let clients: ClientInterface[] = searchText.length > 0 ? data?.clients.filter((client: ClientInterface) => client.name.toLowerCase().includes(searchText.toLowerCase())) : []
 
@@ -85,6 +99,15 @@ const Clients = () => {
                 </div>
 
                 {showingList ? <ListClients deleteModal={deleteModal} list={searchText.length > 0 ? clients : data?.clients} /> : <GridClients deleteModal={deleteModal} list={searchText.length > 0 ? clients : data?.clients} />}
+
+                <div className="mx-auto flex flex-col gap-4 items-center">
+                   <span>Página {skip /100 + 1} de 3</span> 
+                   <div className="flex gap-4">
+                    <button onClick={() => handlePagination(false)} className="bg-gray-200 rounded px-4 hover:bg-gray-300 transition-colors">Retornar</button>
+                    <button onClick={() => handlePagination(true)}  className="bg-gray-200 rounded px-4 hover:bg-gray-300 transition-colors">Próximo</button>
+
+                   </div>
+                </div>
             </section>
         </Layout>
     )
